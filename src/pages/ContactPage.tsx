@@ -74,16 +74,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Hero Header with Background Photo */}
-      <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
+      {/* Hero Header */}
+      <section className="relative py-20 bg-purple-950 overflow-hidden border-b border-purple-800/40">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/src/assets/images/facility_bedok_location_1790325982040.jpg"
-            alt="Bedok Location Background"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter brightness-50 scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.25)_0,rgba(24,9,43,1)_80%)]" />
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:24px_24px]" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
@@ -301,7 +296,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
         </div>
       </section>
 
-      {/* Google Maps / Location Visual Embed Section */}
+      {/* Location Map Coordinates Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
@@ -325,8 +320,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({
         </div>
 
         {/* Map Box */}
-        <div className="relative h-96 rounded-3xl overflow-hidden border border-purple-800/80 bg-purple-950 shadow-2xl flex items-center justify-center">
-          <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="relative h-80 rounded-3xl overflow-hidden border border-purple-800/80 bg-purple-900/40 shadow-2xl flex items-center justify-center p-6">
+          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] [background-size:16px_16px]" />
           
           <div className="relative z-10 max-w-md p-6 rounded-2xl bg-purple-950/90 backdrop-blur-md border border-purple-600/50 text-center space-y-3 shadow-2xl">
             <div className="w-12 h-12 rounded-full bg-amber-400 text-purple-950 flex items-center justify-center mx-auto font-bold shadow-lg">

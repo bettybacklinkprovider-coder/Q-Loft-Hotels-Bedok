@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PageId, Currency } from '../types';
-import { ROOMS, HOTEL_INFO, CURRENCY_RATES } from '../data/hotelData';
+import { ROOMS, HOTEL_INFO, CURRENCY_RATES, DEFAULT_FALLBACK_IMAGE } from '../data/hotelData';
 import {
   Calendar,
   BedDouble,
@@ -14,7 +14,8 @@ import {
   Sparkles,
   Search,
   CheckCircle2,
-  Filter
+  Filter,
+  Camera
 } from 'lucide-react';
 
 interface RoomsPageProps {
@@ -43,23 +44,27 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
     return matchesCategory && matchesGuests;
   });
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = DEFAULT_FALLBACK_IMAGE;
+  };
+
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Rooms Hero Banner with Background Photo */}
+      {/* Rooms Hero Banner with Background Image */}
       <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
         <div className="absolute inset-0 z-0">
           <img
-            src="/src/assets/images/room_deluxe_loft_1790321774811.jpg"
-            alt="Boutique Room Background"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter brightness-50 scale-105"
+            src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1600&q=80&auto=format&fit=crop"
+            alt="Q Loft Hotels Accommodations Banner"
+            onError={handleImageError}
+            className="w-full h-full object-cover filter brightness-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
+          <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/80 to-purple-950/60" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/80 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/90 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
             Boutique Accommodations
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight drop-shadow-md">
@@ -139,33 +144,62 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
                   key={room.id}
                   className="bg-purple-950/90 border border-purple-800/60 rounded-3xl overflow-hidden shadow-2xl hover:border-amber-400/40 transition-all duration-300 flex flex-col lg:flex-row justify-between"
                 >
-                  {/* Left Column: Room Photo */}
-                  <div className="relative lg:w-2/5 h-64 lg:h-auto min-h-[250px] overflow-hidden bg-purple-900 shrink-0">
-                    <img
-                      src={room.image}
-                      alt={room.name}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-purple-950 via-purple-950/20 to-transparent" />
-                    <span className="absolute top-4 left-4 bg-purple-950/80 backdrop-blur-md px-3 py-1 rounded-md text-xs font-semibold text-amber-300 border border-purple-700/50 shadow">
-                      {room.category} Category
-                    </span>
+                  {/* Left Column: Room Photo Gallery Preview */}
+                  <div className="lg:w-5/12 relative flex flex-col justify-between bg-purple-900 border-b lg:border-b-0 lg:border-r border-purple-800/60">
+                    <div className="relative h-64 lg:h-full min-h-[260px] overflow-hidden group">
+                      <img
+                        src={room.image}
+                        alt={room.name}
+                        onError={handleImageError}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/20 to-transparent" />
+
+                      <div className="absolute top-4 left-4 flex items-center gap-2">
+                        <span className="bg-purple-950/90 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-semibold text-amber-300 border border-purple-700/50 shadow">
+                          {room.category} Category
+                        </span>
+                      </div>
+
+                      {/* Photo Gallery Thumbnails */}
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2">
+                        {room.images.map((imgUrl, imgIdx) => (
+                          <div
+                            key={imgIdx}
+                            onClick={() => onViewRoomDetails(room.id)}
+                            className="w-14 h-12 rounded-lg overflow-hidden border border-purple-500/60 shadow-lg cursor-pointer hover:border-amber-400 transition-all shrink-0"
+                          >
+                            <img
+                              src={imgUrl}
+                              alt={`${room.name} thumbnail ${imgIdx}`}
+                              onError={handleImageError}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
+                        <div
+                          onClick={() => onViewRoomDetails(room.id)}
+                          className="px-2 py-3 rounded-lg bg-purple-950/85 backdrop-blur-md border border-purple-600/50 text-[10px] text-amber-300 font-semibold cursor-pointer hover:bg-purple-900 flex items-center gap-1"
+                        >
+                          <Camera className="w-3 h-3" />
+                          <span>Photos</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Right Column: Details & Actions */}
-                  <div className="lg:w-3/5 p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+                  <div className="lg:w-7/12 p-6 sm:p-8 space-y-6 flex flex-col justify-between">
                     <div className="space-y-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-purple-800/60 pb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-900/80 pb-4">
                         <div>
-                          <h2 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white">
+                          <h2 className="text-2xl font-serif-luxury font-bold text-white">
                             {room.name}
                           </h2>
-                          <p className="text-xs text-amber-300 mt-0.5">{room.tagline}</p>
+                          <p className="text-xs text-purple-300 mt-0.5">{room.tagline}</p>
                         </div>
 
-                        {/* Pricing Badge */}
-                        <div className="text-left sm:text-right bg-purple-900/60 border border-amber-400/30 px-4 py-2 rounded-xl shrink-0">
+                        <div className="bg-purple-900/80 border border-amber-400/30 px-3.5 py-2 rounded-xl text-left sm:text-right shrink-0">
                           <span className="text-[10px] text-purple-300 block">Rate per night</span>
                           <span className="text-xl font-serif-luxury font-bold text-amber-300">
                             {rateObj.symbol}{priceConverted} <span className="text-xs text-purple-200 font-sans">{currency}</span>
@@ -227,7 +261,7 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
                         className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-semibold text-purple-200 bg-purple-900/60 hover:bg-purple-800 border border-purple-700/50 transition-colors flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <Eye className="w-4 h-4 text-purple-300" />
-                        <span>View Full Room Details</span>
+                        <span>View Full Room Details & Photos</span>
                       </button>
 
                       <button
@@ -248,18 +282,8 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
 
       {/* Room Booking Guarantee Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 shadow-2xl">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="/src/assets/images/facility_reception_lobby_1790321814207.jpg"
-              alt="Reception lobby"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover filter brightness-40"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-purple-900/90 to-indigo-950/95" />
-          </div>
-
-          <div className="relative z-10 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 shadow-2xl p-8 sm:p-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
               <span className="text-xs font-semibold uppercase tracking-widest text-amber-300">
                 Need Special Room Arrangements?

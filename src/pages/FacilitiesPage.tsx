@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageId } from '../types';
-import { HOTEL_FACILITIES, HOTEL_INFO, NEARBY_ATTRACTIONS } from '../data/hotelData';
+import { HOTEL_FACILITIES, HOTEL_INFO, NEARBY_ATTRACTIONS, DEFAULT_FALLBACK_IMAGE } from '../data/hotelData';
 import {
   Bed,
   Wifi,
@@ -31,14 +31,18 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
   onOpenBooking,
 }) => {
   const iconMap: Record<string, React.ReactNode> = {
-    Bed: <Bed className="w-6 h-6 text-amber-400" />,
-    Wifi: <Wifi className="w-6 h-6 text-amber-400" />,
-    Wind: <Wind className="w-6 h-6 text-amber-400" />,
-    Headphones: <Headphones className="w-6 h-6 text-amber-400" />,
-    MapPin: <MapPin className="w-6 h-6 text-amber-400" />,
-    Sparkles: <Sparkles className="w-6 h-6 text-amber-400" />,
-    Briefcase: <Briefcase className="w-6 h-6 text-amber-400" />,
-    ShieldCheck: <ShieldCheck className="w-6 h-6 text-amber-400" />,
+    Bed: <Bed className="w-5 h-5 text-amber-400" />,
+    Wifi: <Wifi className="w-5 h-5 text-amber-400" />,
+    Wind: <Wind className="w-5 h-5 text-amber-400" />,
+    Headphones: <Headphones className="w-5 h-5 text-amber-400" />,
+    MapPin: <MapPin className="w-5 h-5 text-amber-400" />,
+    Sparkles: <Sparkles className="w-5 h-5 text-amber-400" />,
+    Briefcase: <Briefcase className="w-5 h-5 text-amber-400" />,
+    ShieldCheck: <ShieldCheck className="w-5 h-5 text-amber-400" />,
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = DEFAULT_FALLBACK_IMAGE;
   };
 
   const additionalServices = [
@@ -77,20 +81,20 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Hero Banner with Background Photo */}
+      {/* Hero Banner with Background Image */}
       <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
         <div className="absolute inset-0 z-0">
           <img
-            src={HOTEL_INFO.lobbyImage}
-            alt="Hotel Reception Lobby"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter brightness-50 scale-105"
+            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80&auto=format&fit=crop"
+            alt="Q Loft Facilities Banner"
+            onError={handleImageError}
+            className="w-full h-full object-cover filter brightness-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
+          <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/80 to-purple-950/60" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/80 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/90 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
             Guest Comforts & Services
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight drop-shadow-md">
@@ -119,37 +123,34 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
               key={fac.id}
               className="bg-purple-950/90 border border-purple-800/60 hover:border-amber-400/50 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between"
             >
-              {/* Facility Image Header */}
-              <div className="relative h-44 overflow-hidden bg-purple-900">
+              <div className="relative h-48 overflow-hidden bg-purple-900">
                 <img
                   src={fac.image}
                   alt={fac.title}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90"
+                  onError={handleImageError}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
-                
-                {fac.highlight && (
-                  <div className="absolute top-3 right-3 bg-purple-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
-                    {fac.highlight}
-                  </div>
-                )}
 
-                <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-purple-950/80 backdrop-blur-md border border-purple-600/50 flex items-center justify-center shadow-md">
+                <div className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-purple-950/90 border border-purple-600/50 flex items-center justify-center shadow-md backdrop-blur-md">
                   {iconMap[fac.iconName] || <Bed className="w-5 h-5 text-amber-400" />}
                 </div>
+
+                {fac.highlight && (
+                  <span className="absolute top-3 right-3 bg-purple-950/90 border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md">
+                    {fac.highlight}
+                  </span>
+                )}
               </div>
 
               {/* Card Details */}
-              <div className="p-6 space-y-2 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
-                    {fac.title}
-                  </h3>
-                  <p className="text-xs text-purple-300 leading-relaxed">
-                    {fac.description}
-                  </p>
-                </div>
+              <div className="p-5 space-y-2 flex-1">
+                <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
+                  {fac.title}
+                </h3>
+                <p className="text-xs text-purple-300 leading-relaxed">
+                  {fac.description}
+                </p>
               </div>
             </div>
           ))}
@@ -192,7 +193,7 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
         </div>
       </section>
 
-      {/* Nearby Enclave & Convenience Highlights */}
+      {/* Nearby Enclave & Convenience Highlights with Photos */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-xs font-semibold uppercase tracking-widest text-amber-400">
@@ -210,21 +211,36 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
           {NEARBY_ATTRACTIONS.map((attr, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-purple-950/80 border border-purple-800/60 hover:border-amber-400/40 transition-all space-y-3"
+              className="rounded-2xl bg-purple-950/80 border border-purple-800/60 hover:border-amber-400/40 transition-all overflow-hidden shadow-xl space-y-0"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-amber-300 bg-purple-900 px-2.5 py-0.5 rounded">
-                  {attr.category}
-                </span>
-                <span className="text-xs font-bold text-white">{attr.timeByTransport}</span>
+              <div className="relative h-44 overflow-hidden bg-purple-900">
+                <img
+                  src={attr.image}
+                  alt={attr.name}
+                  onError={handleImageError}
+                  className="w-full h-full object-cover filter brightness-90 hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
+
+                <div className="absolute top-3 left-3">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-amber-300 bg-purple-950/90 px-2.5 py-1 rounded border border-purple-700/50 backdrop-blur-md">
+                    {attr.category}
+                  </span>
+                </div>
+
+                <div className="absolute top-3 right-3 bg-purple-950/90 backdrop-blur-md px-2.5 py-1 rounded text-xs font-bold text-white border border-purple-700/50">
+                  {attr.timeByTransport}
+                </div>
               </div>
 
-              <h3 className="text-lg font-serif-luxury font-bold text-white">{attr.name}</h3>
-              <p className="text-xs text-purple-300 leading-relaxed">{attr.description}</p>
-              
-              <div className="pt-2 flex items-center gap-1.5 text-xs text-purple-400">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                <span>Distance: {attr.distance}</span>
+              <div className="p-6 space-y-3">
+                <h3 className="text-lg font-serif-luxury font-bold text-white">{attr.name}</h3>
+                <p className="text-xs text-purple-300 leading-relaxed">{attr.description}</p>
+                
+                <div className="pt-2 flex items-center gap-1.5 text-xs text-amber-300 border-t border-purple-900/60">
+                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Distance: {attr.distance}</span>
+                </div>
               </div>
             </div>
           ))}
@@ -233,40 +249,28 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
 
       {/* Bottom CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 shadow-2xl">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="/src/assets/images/facility_modern_rooms_1790325916659.jpg"
-              alt="Modern rooms facility"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover filter brightness-40"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-purple-900/90 to-indigo-950/95" />
-          </div>
-
-          <div className="relative z-10 p-8 sm:p-12 text-center space-y-6">
-            <h3 className="text-2xl sm:text-4xl font-serif-luxury font-bold text-white max-w-xl mx-auto">
-              Ready to Experience Our Services at Q Loft Hotels?
-            </h3>
-            <p className="text-xs sm:text-sm text-purple-200 max-w-lg mx-auto leading-relaxed">
-              Book your room directly today for direct guest support, flexible check-in, and best available rates.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={onOpenBooking}
-                className="px-8 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer flex items-center gap-2"
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Book Your Room Now</span>
-              </button>
-              <button
-                onClick={() => onNavigate('contact')}
-                className="px-8 py-3 rounded-xl font-semibold text-xs text-white bg-purple-900/70 hover:bg-purple-800 border border-purple-600/50 backdrop-blur-md cursor-pointer flex items-center gap-2"
-              >
-                <Phone className="w-4 h-4 text-amber-400" />
-                <span>Contact Desk</span>
-              </button>
-            </div>
+        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 shadow-2xl p-8 sm:p-12 text-center space-y-6">
+          <h3 className="text-2xl sm:text-4xl font-serif-luxury font-bold text-white max-w-xl mx-auto">
+            Ready to Experience Our Services at Q Loft Hotels?
+          </h3>
+          <p className="text-xs sm:text-sm text-purple-200 max-w-lg mx-auto leading-relaxed">
+            Book your room directly today for direct guest support, flexible check-in, and best available rates.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={onOpenBooking}
+              className="px-8 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer flex items-center gap-2"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Book Your Room Now</span>
+            </button>
+            <button
+              onClick={() => onNavigate('contact')}
+              className="px-8 py-3 rounded-xl font-semibold text-xs text-white bg-purple-900/70 hover:bg-purple-800 border border-purple-600/50 backdrop-blur-md cursor-pointer flex items-center gap-2"
+            >
+              <Phone className="w-4 h-4 text-amber-400" />
+              <span>Contact Desk</span>
+            </button>
           </div>
         </div>
       </section>

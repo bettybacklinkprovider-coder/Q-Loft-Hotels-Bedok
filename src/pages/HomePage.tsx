@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageId, Currency } from '../types';
-import { HOTEL_INFO, ROOMS, HOTEL_FACILITIES, WHY_STAY_REASONS, CURRENCY_RATES } from '../data/hotelData';
+import { HOTEL_INFO, ROOMS, HOTEL_FACILITIES, WHY_STAY_REASONS, CURRENCY_RATES, GALLERY_IMAGES, DEFAULT_FALLBACK_IMAGE } from '../data/hotelData';
 import {
   Calendar,
   Phone,
@@ -16,8 +16,12 @@ import {
   Star,
   ExternalLink,
   ShieldCheck,
-  Building,
-  Navigation
+  BedDouble,
+  Briefcase,
+  Camera,
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -33,42 +37,57 @@ export const HomePage: React.FC<HomePageProps> = ({
   onViewRoomDetails,
   currency,
 }) => {
+  const [activeGalleryCat, setActiveGalleryCat] = useState<string>('All');
+  const [selectedGalleryIdx, setSelectedGalleryIdx] = useState<number | null>(null);
+
   const rateObj = CURRENCY_RATES[currency];
 
   const iconMap: Record<string, React.ReactNode> = {
-    Bed: <Bed className="w-6 h-6 text-amber-400" />,
-    Wifi: <Wifi className="w-6 h-6 text-amber-400" />,
-    Wind: <Wind className="w-6 h-6 text-amber-400" />,
-    Headphones: <Headphones className="w-6 h-6 text-amber-400" />,
-    MapPin: <MapPin className="w-6 h-6 text-amber-400" />,
-    Sparkles: <Sparkles className="w-6 h-6 text-amber-400" />,
+    Bed: <Bed className="w-5 h-5 text-amber-400" />,
+    Wifi: <Wifi className="w-5 h-5 text-amber-400" />,
+    Wind: <Wind className="w-5 h-5 text-amber-400" />,
+    Headphones: <Headphones className="w-5 h-5 text-amber-400" />,
+    MapPin: <MapPin className="w-5 h-5 text-amber-400" />,
+    Sparkles: <Sparkles className="w-5 h-5 text-amber-400" />,
+    Briefcase: <Briefcase className="w-5 h-5 text-amber-400" />,
+    ShieldCheck: <ShieldCheck className="w-5 h-5 text-amber-400" />,
+  };
+
+  const galleryCategories = ['All', 'Rooms', 'Lobby & Reception', 'Dining & Enclave', 'Location & Attractions'];
+
+  const filteredGallery = GALLERY_IMAGES.filter(
+    (item) => activeGalleryCat === 'All' || item.category === activeGalleryCat
+  );
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = DEFAULT_FALLBACK_IMAGE;
   };
 
   return (
     <div className="space-y-0">
-      {/* SECTION 1: HERO SECTION */}
-      <section className="relative min-h-[85vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-purple-950">
-        {/* Background Photo with Gradient Scrim */}
+      {/* SECTION 1: HERO SECTION WITH IMAGE BACKGROUND */}
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-28 pb-20 overflow-hidden bg-purple-950">
+        {/* Real Hotel Exterior / Lobby Image Backdrop */}
         <div className="absolute inset-0 z-0">
           <img
             src={HOTEL_INFO.heroImage}
-            alt="Q Loft Hotels Bedok Exterior"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center scale-105 filter brightness-75"
+            alt="Q Loft Hotels @ Bedok Building Exterior"
+            onError={handleImageError}
+            className="w-full h-full object-cover object-center scale-105 filter brightness-75 transition-all duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/80 to-purple-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.25)_0,transparent_75%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/85 to-purple-950/60" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(147,51,234,0.3)_0,transparent_70%)]" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           {/* Location pill indicator */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/80 border border-purple-500/40 backdrop-blur-md text-xs text-purple-200 shadow-lg">
-            <MapPin className="w-3.5 h-3.5 text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/90 border border-purple-500/50 backdrop-blur-md text-xs text-purple-200 shadow-xl">
+            <MapPin className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
             <span className="font-medium tracking-wide">359A Bedok Rd, Bedok, Singapore 469548</span>
           </div>
 
           {/* Main Hero Heading */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif-luxury font-bold text-white tracking-tight leading-[1.1] drop-shadow-md">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif-luxury font-bold text-white tracking-tight leading-[1.1] drop-shadow-lg">
             Welcome to <span className="text-purple-gradient block sm:inline">Q Loft Hotels @ Bedok</span>
           </h1>
 
@@ -89,7 +108,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               onClick={() => onNavigate('contact')}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm text-white bg-purple-900/70 hover:bg-purple-800/90 border border-purple-500/40 backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm text-white bg-purple-900/80 hover:bg-purple-800 border border-purple-500/50 backdrop-blur-md transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4 text-amber-400" />
               <span>Contact Us</span>
@@ -98,19 +117,19 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* Key Quick Badges */}
           <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto text-left">
-            <div className="p-3 rounded-xl bg-purple-950/75 border border-purple-800/60 backdrop-blur-md shadow-lg">
+            <div className="p-3 rounded-xl bg-purple-950/85 border border-purple-800/70 backdrop-blur-md shadow-lg">
               <span className="text-[10px] text-purple-300 uppercase tracking-widest block font-medium">Location</span>
               <span className="text-xs font-bold text-white block mt-0.5">Bedok, Singapore</span>
             </div>
-            <div className="p-3 rounded-xl bg-purple-950/75 border border-purple-800/60 backdrop-blur-md shadow-lg">
+            <div className="p-3 rounded-xl bg-purple-950/85 border border-purple-800/70 backdrop-blur-md shadow-lg">
               <span className="text-[10px] text-purple-300 uppercase tracking-widest block font-medium">Changi Airport</span>
               <span className="text-xs font-bold text-white block mt-0.5">12 Mins Drive</span>
             </div>
-            <div className="p-3 rounded-xl bg-purple-950/75 border border-purple-800/60 backdrop-blur-md shadow-lg">
+            <div className="p-3 rounded-xl bg-purple-950/85 border border-purple-800/70 backdrop-blur-md shadow-lg">
               <span className="text-[10px] text-purple-300 uppercase tracking-widest block font-medium">Transit</span>
               <span className="text-xs font-bold text-white block mt-0.5">Tanah Merah MRT</span>
             </div>
-            <div className="p-3 rounded-xl bg-purple-950/75 border border-purple-800/60 backdrop-blur-md shadow-lg">
+            <div className="p-3 rounded-xl bg-purple-950/85 border border-purple-800/70 backdrop-blur-md shadow-lg">
               <span className="text-[10px] text-purple-300 uppercase tracking-widest block font-medium">Food Enclave</span>
               <span className="text-xs font-bold text-amber-300 block mt-0.5">Simpang Bedok (1m)</span>
             </div>
@@ -118,74 +137,50 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 2: ABOUT THE HOTEL */}
+      {/* SECTION 2: ABOUT THE HOTEL WITH PHOTO SHOWCASE */}
       <section className="py-20 bg-purple-950 text-purple-100 relative overflow-hidden border-t border-purple-800/40">
-        {/* Background Image Scrim */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none">
-          <img
-            src={HOTEL_INFO.lobbyImage}
-            alt="Q Loft Hotels Lobby"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter grayscale"
-          />
-        </div>
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Feature Highlights Panel with Background Image */}
-            <div className="relative rounded-3xl overflow-hidden border border-purple-800/80 shadow-2xl space-y-6">
-              <div className="absolute inset-0 z-0">
+            {/* Feature Highlights Panel & Hotel Photo */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="relative rounded-3xl overflow-hidden border border-purple-800/80 bg-purple-900/40 backdrop-blur-xl shadow-2xl group">
                 <img
-                  src={HOTEL_INFO.lobbyImage}
-                  alt="Hotel Reception Lobby"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover filter brightness-50"
+                  src={GALLERY_IMAGES[4].url}
+                  alt="Q Loft Hotels Lobby Reception"
+                  onError={handleImageError}
+                  className="w-full h-64 sm:h-72 object-cover object-center group-hover:scale-105 transition-transform duration-700 filter brightness-90"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/85 to-purple-950/70" />
-              </div>
-
-              <div className="relative z-10 p-8 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-400 text-purple-950 flex items-center justify-center font-bold shadow-lg shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/40 to-transparent" />
+                
+                <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-purple-950/90 border border-purple-700/60 backdrop-blur-md flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-amber-400 text-purple-950 flex items-center justify-center font-bold shadow-lg shrink-0">
                     <Star className="w-6 h-6 fill-purple-950" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-serif-luxury font-bold text-white">Boutique Comfort in East Singapore</h4>
+                    <h4 className="text-sm font-serif-luxury font-bold text-white">Boutique Comfort in East Singapore</h4>
                     <p className="text-xs text-purple-200">Contemporary architecture tailored for leisure & business</p>
                   </div>
                 </div>
+              </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-xl bg-purple-950/80 border border-purple-800/60 backdrop-blur-md space-y-1">
-                    <span className="text-2xl font-serif-luxury font-bold text-amber-300">24/7</span>
-                    <p className="text-xs font-semibold text-white">Front Desk Service</p>
-                    <p className="text-[10px] text-purple-300">Round-the-clock guest support</p>
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-purple-900/40 border border-purple-800/60 backdrop-blur-md space-y-1">
+                  <span className="text-2xl font-serif-luxury font-bold text-amber-300">24/7</span>
+                  <p className="text-xs font-semibold text-white">Front Desk Service</p>
+                  <p className="text-[10px] text-purple-300">Round-the-clock guest support</p>
+                </div>
 
-                  <div className="p-4 rounded-xl bg-purple-950/80 border border-purple-800/60 backdrop-blur-md space-y-1">
-                    <span className="text-2xl font-serif-luxury font-bold text-amber-300">1 Gbps</span>
-                    <p className="text-xs font-semibold text-white">Free Optical Wi-Fi</p>
-                    <p className="text-[10px] text-purple-300">Ultra-fast fiber connectivity</p>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-purple-950/80 border border-purple-800/60 backdrop-blur-md space-y-1">
-                    <span className="text-2xl font-serif-luxury font-bold text-amber-300">12 Mins</span>
-                    <p className="text-xs font-semibold text-white">Changi Airport</p>
-                    <p className="text-[10px] text-purple-300">Quick taxi / train access</p>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-purple-950/80 border border-purple-800/60 backdrop-blur-md space-y-1">
-                    <span className="text-2xl font-serif-luxury font-bold text-amber-300">50m</span>
-                    <p className="text-xs font-semibold text-white">Simpang Bedok</p>
-                    <p className="text-[10px] text-purple-300">Iconic 24h hawker enclave</p>
-                  </div>
+                <div className="p-4 rounded-xl bg-purple-900/40 border border-purple-800/60 backdrop-blur-md space-y-1">
+                  <span className="text-2xl font-serif-luxury font-bold text-amber-300">1 Gbps</span>
+                  <p className="text-xs font-semibold text-white">Free Optical Wi-Fi</p>
+                  <p className="text-[10px] text-purple-300">Ultra-fast fiber connectivity</p>
                 </div>
               </div>
             </div>
 
             {/* Content Column */}
-            <div className="space-y-6">
+            <div className="lg:col-span-6 space-y-6">
               <div className="space-y-2">
                 <span className="text-xs font-semibold uppercase tracking-widest text-amber-400">
                   About Q Loft Hotels
@@ -236,7 +231,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 3: ROOMS & ACCOMMODATION */}
+      {/* SECTION 3: ROOMS & ACCOMMODATION WITH REAL ROOM PHOTOS */}
       <section className="py-20 bg-purple-900/30 text-purple-100 border-t border-purple-800/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
@@ -266,38 +261,43 @@ export const HomePage: React.FC<HomePageProps> = ({
               return (
                 <div
                   key={room.id}
-                  className="bg-purple-950/90 border border-purple-800/60 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between hover:border-amber-400/50"
+                  className="bg-purple-950/90 border border-purple-800/60 rounded-3xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between hover:border-amber-400/50"
                 >
-                  {/* Card Room Photo Background Header */}
-                  <div className="relative h-48 overflow-hidden bg-purple-900">
+                  {/* Real Room Photo Header */}
+                  <div className="relative h-56 overflow-hidden bg-purple-900">
                     <img
                       src={room.image}
                       alt={room.name}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={handleImageError}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out filter brightness-90"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
-                    
-                    <span className="absolute top-3 left-3 bg-purple-950/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider text-purple-200 border border-purple-700/50">
-                      {room.category} Category
-                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/20 to-transparent" />
 
-                    <span className="absolute bottom-3 right-3 bg-purple-950/90 backdrop-blur-md px-3 py-1 rounded-lg border border-amber-400/40 text-amber-300 font-serif-luxury font-bold text-sm shadow">
-                      {rateObj.symbol}{priceConverted} <span className="text-[10px] font-sans text-purple-300">/ night</span>
-                    </span>
+                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                      <span className="bg-purple-950/85 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider text-purple-200 border border-purple-700/50">
+                        {room.category} Category
+                      </span>
+
+                      <span className="bg-purple-950/90 backdrop-blur-md px-3 py-1 rounded-lg border border-amber-400/40 text-amber-300 font-serif-luxury font-bold text-sm shadow">
+                        {rateObj.symbol}{priceConverted} <span className="text-[10px] font-sans text-purple-300">/ night</span>
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+                      <h3 className="text-lg font-serif-luxury font-bold drop-shadow-md">
+                        {room.name}
+                      </h3>
+                    </div>
                   </div>
 
                   <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                     {/* Room Info */}
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
-                        {room.name}
-                      </h3>
+                    <div className="space-y-3">
                       <p className="text-xs text-purple-300 leading-relaxed">
                         {room.description}
                       </p>
 
-                      <div className="pt-2 space-y-1.5 text-xs text-purple-200">
+                      <div className="space-y-1.5 text-xs text-purple-200 pt-1 border-t border-purple-900/60">
                         <div className="flex items-center justify-between">
                           <span className="text-purple-400">Bedding:</span>
                           <span className="font-medium text-white">{room.bedType}</span>
@@ -313,15 +313,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <div className="pt-4 grid grid-cols-2 gap-3 border-t border-purple-800/60">
                       <button
                         onClick={() => onViewRoomDetails(room.id)}
-                        className="px-3 py-2 rounded-lg text-xs font-medium text-purple-200 bg-purple-900/60 hover:bg-purple-800/80 border border-purple-700/50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="px-3 py-2.5 rounded-xl text-xs font-medium text-purple-200 bg-purple-900/60 hover:bg-purple-800/80 border border-purple-700/50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5 text-purple-300" />
-                        <span>Details</span>
+                        <span>Details & Photos</span>
                       </button>
 
                       <button
                         onClick={() => onOpenBooking(room.id)}
-                        className="px-3 py-2 rounded-lg text-xs font-semibold text-purple-950 bg-amber-300 hover:bg-amber-200 transition-colors shadow flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="px-3 py-2.5 rounded-xl text-xs font-semibold text-purple-950 bg-amber-300 hover:bg-amber-200 transition-colors shadow flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <span>Book Now</span>
                       </button>
@@ -335,7 +335,129 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 4: HOTEL FACILITIES */}
+      {/* SECTION 4: INTERACTIVE HOTEL PHOTO GALLERY */}
+      <section className="py-20 bg-purple-950 text-purple-100 border-t border-purple-800/40 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-amber-400 flex items-center justify-center gap-1.5">
+              <Camera className="w-4 h-4 text-amber-400" /> Photo Showcase
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-white">
+              Explore Q Loft Hotels @ Bedok in Photos
+            </h2>
+            <p className="text-xs sm:text-sm text-purple-300">
+              Take a visual tour of our boutique guest rooms, loft suites, reception, and nearby Bedok attractions.
+            </p>
+          </div>
+
+          {/* Gallery Category Filter */}
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {galleryCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveGalleryCat(cat)}
+                className={`px-4 py-2 text-xs font-medium rounded-xl transition-all cursor-pointer ${
+                  activeGalleryCat === cat
+                    ? 'bg-amber-300 text-purple-950 font-bold shadow-lg'
+                    : 'bg-purple-900/60 text-purple-200 hover:bg-purple-800 hover:text-white border border-purple-700/40'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredGallery.map((item, idx) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedGalleryIdx(GALLERY_IMAGES.findIndex((g) => g.id === item.id))}
+                className="group relative h-64 rounded-2xl overflow-hidden border border-purple-800/60 bg-purple-900/40 shadow-xl cursor-pointer"
+              >
+                <img
+                  src={item.url}
+                  alt={item.title}
+                  onError={handleImageError}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+
+                <div className="absolute top-3 left-3">
+                  <span className="bg-purple-950/90 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-semibold text-amber-300 border border-purple-700/50 shadow">
+                    {item.category}
+                  </span>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 space-y-1">
+                  <h3 className="text-base font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-[11px] text-purple-200 line-clamp-1">{item.caption}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* LIGHTBOX POPUP MODAL FOR PHOTO GALLERY */}
+      {selectedGalleryIdx !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-lg p-4">
+          <button
+            onClick={() => setSelectedGalleryIdx(null)}
+            className="absolute top-5 right-5 p-3 text-white bg-purple-900/80 hover:bg-purple-800 rounded-full border border-purple-600/50 cursor-pointer z-50"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={() =>
+              setSelectedGalleryIdx((prev) =>
+                prev !== null && prev > 0 ? prev - 1 : GALLERY_IMAGES.length - 1
+              )
+            }
+            className="absolute left-4 p-3 text-white bg-purple-900/80 hover:bg-purple-800 rounded-full border border-purple-600/50 cursor-pointer z-50"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={() =>
+              setSelectedGalleryIdx((prev) =>
+                prev !== null && prev < GALLERY_IMAGES.length - 1 ? prev + 1 : 0
+              )
+            }
+            className="absolute right-4 p-3 text-white bg-purple-900/80 hover:bg-purple-800 rounded-full border border-purple-600/50 cursor-pointer z-50"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          <div className="max-w-4xl w-full max-h-[85vh] flex flex-col items-center justify-center space-y-4">
+            <img
+              src={GALLERY_IMAGES[selectedGalleryIdx].url}
+              alt={GALLERY_IMAGES[selectedGalleryIdx].title}
+              onError={handleImageError}
+              className="max-h-[70vh] max-w-full object-contain rounded-2xl border border-purple-700/60 shadow-2xl"
+            />
+            <div className="text-center space-y-1 max-w-xl">
+              <span className="text-[10px] font-semibold text-amber-300 uppercase tracking-widest block">
+                {GALLERY_IMAGES[selectedGalleryIdx].category}
+              </span>
+              <h3 className="text-xl font-serif-luxury font-bold text-white">
+                {GALLERY_IMAGES[selectedGalleryIdx].title}
+              </h3>
+              <p className="text-xs text-purple-200">
+                {GALLERY_IMAGES[selectedGalleryIdx].caption}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SECTION 5: HOTEL FACILITIES WITH PREVIEW PHOTOS */}
       <section className="py-20 bg-purple-950 text-purple-100 border-t border-purple-800/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
@@ -358,28 +480,27 @@ export const HomePage: React.FC<HomePageProps> = ({
                 key={fac.id}
                 className="bg-purple-900/40 border border-purple-800/60 hover:border-amber-400/50 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between"
               >
-                {/* Photo header for facility */}
-                <div className="relative h-40 overflow-hidden bg-purple-950">
+                <div className="relative h-44 overflow-hidden bg-purple-950">
                   <img
                     src={fac.image}
                     alt={fac.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90"
+                    onError={handleImageError}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/40 to-transparent" />
-                  
-                  {fac.highlight && (
-                    <div className="absolute top-3 right-3 bg-purple-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
-                      {fac.highlight}
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
 
-                  <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-purple-950/80 backdrop-blur-md border border-purple-600/50 flex items-center justify-center shadow-md">
+                  <div className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-purple-950/90 border border-purple-600/50 flex items-center justify-center shadow-md backdrop-blur-md">
                     {iconMap[fac.iconName] || <Bed className="w-5 h-5 text-amber-400" />}
                   </div>
+
+                  {fac.highlight && (
+                    <span className="absolute top-3 right-3 bg-purple-950/90 border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md">
+                      {fac.highlight}
+                    </span>
+                  )}
                 </div>
 
-                <div className="p-6 space-y-2">
+                <div className="p-5 space-y-2 flex-1">
                   <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
                     {fac.title}
                   </h3>
@@ -394,7 +515,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 5: WHY STAY WITH US */}
+      {/* SECTION 6: WHY STAY WITH US */}
       <section className="py-20 bg-purple-950 text-purple-100 border-t border-purple-800/40 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
@@ -414,36 +535,31 @@ export const HomePage: React.FC<HomePageProps> = ({
             {WHY_STAY_REASONS.map((reason) => (
               <div
                 key={reason.number}
-                className="relative rounded-2xl overflow-hidden border border-purple-800/60 hover:border-amber-400/50 transition-all duration-300 shadow-xl group flex flex-col justify-between min-h-[260px]"
+                className="rounded-2xl bg-purple-900/40 border border-purple-800/60 hover:border-amber-400/50 transition-all duration-300 overflow-hidden shadow-xl group flex flex-col justify-between"
               >
-                {/* Background Photo with Scrim */}
-                <div className="absolute inset-0 z-0">
+                <div className="relative h-40 overflow-hidden bg-purple-950">
                   <img
                     src={reason.image}
                     alt={reason.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-50"
+                    onError={handleImageError}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-90"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/90 to-purple-950/70" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-transparent to-transparent" />
+                  
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-block bg-purple-950/90 backdrop-blur-md px-3.5 py-1 rounded-xl border border-amber-400/40 text-amber-300 font-serif-luxury font-bold text-sm shadow">
+                      {reason.number}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="relative z-10 p-6 space-y-4 flex flex-col justify-between h-full">
-                  {/* Number Badge Header */}
-                  <div>
-                    <div className="inline-block bg-purple-900/90 backdrop-blur-md px-3.5 py-1 rounded-xl border border-amber-400/40 text-amber-300 font-serif-luxury font-bold text-sm shadow">
-                      {reason.number}
-                    </div>
-                  </div>
-
-                  {/* Card Details */}
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
-                      {reason.title}
-                    </h3>
-                    <p className="text-xs text-purple-200 leading-relaxed">
-                      {reason.description}
-                    </p>
-                  </div>
+                <div className="p-5 space-y-2 flex-1">
+                  <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
+                    {reason.title}
+                  </h3>
+                  <p className="text-xs text-purple-200 leading-relaxed">
+                    {reason.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -452,23 +568,12 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* SECTION 6: CONTACT & BOOKING CTA */}
+      {/* SECTION 7: CONTACT & BOOKING CTA WITH MAP & HOTEL PHOTO */}
       <section className="py-20 bg-purple-950 text-purple-100 border-t border-purple-800/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
-          <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 shadow-2xl">
-            {/* CTA Background Photo with Scrim */}
-            <div className="absolute inset-0 z-0">
-              <img
-                src={HOTEL_INFO.heroImage}
-                alt="Hotel exterior"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover filter brightness-40"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-indigo-950/90 to-purple-950/95" />
-            </div>
-
-            <div className="relative z-10 p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 bg-gradient-to-r from-purple-950 via-indigo-950 to-purple-950 shadow-2xl p-8 sm:p-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               
               {/* Call to Action Text */}
               <div className="space-y-6">
@@ -527,34 +632,23 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
 
-              {/* Embedded Map Visual Box */}
+              {/* Embedded Map & Hotel Exterior Photo */}
               <div className="bg-purple-950/85 backdrop-blur-md border border-purple-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
-                <div className="flex items-center justify-between pb-3 border-b border-purple-800/60">
-                  <div className="flex items-center gap-2 text-xs font-bold text-white">
-                    <Navigation className="w-4 h-4 text-amber-400" />
-                    <span>Bedok Road Location</span>
-                  </div>
-                  <span className="text-[10px] text-purple-300 bg-purple-900 px-2 py-0.5 rounded">
-                    Singapore 469548
-                  </span>
-                </div>
-
-                {/* Visual Map Mockup with Location Photo Background */}
-                <div className="relative h-48 bg-slate-900 rounded-xl overflow-hidden border border-purple-800/60 flex items-center justify-center p-4 text-center">
+                <div className="relative h-48 rounded-xl overflow-hidden border border-purple-800/60">
                   <img
-                    src="/src/assets/images/facility_bedok_location_1790325982040.jpg"
-                    alt="Bedok location map view"
-                    referrerPolicy="no-referrer"
-                    className="absolute inset-0 w-full h-full object-cover filter brightness-50"
+                    src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80&auto=format&fit=crop"
+                    alt="Q Loft Hotels Bedok Road Location"
+                    onError={handleImageError}
+                    className="w-full h-full object-cover filter brightness-75"
                   />
-                  <div className="absolute inset-0 bg-purple-950/60 backdrop-blur-xs" />
-                  
-                  <div className="relative z-10 space-y-2">
-                    <div className="w-10 h-10 rounded-full bg-amber-400 text-purple-950 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+                  <div className="absolute inset-0 bg-purple-950/40" />
+
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 space-y-2">
+                    <div className="w-10 h-10 rounded-full bg-amber-400 text-purple-950 flex items-center justify-center shadow-lg animate-bounce">
                       <MapPin className="w-6 h-6" />
                     </div>
-                    <span className="text-xs font-bold text-white block">Q Loft Hotels @ Bedok</span>
-                    <span className="text-[11px] text-purple-200 block">359A Bedok Rd, Singapore 469548</span>
+                    <span className="text-xs font-bold text-white block drop-shadow-md">Q Loft Hotels @ Bedok</span>
+                    <span className="text-[11px] text-purple-200 block drop-shadow-md">359A Bedok Rd, Singapore 469548</span>
                   </div>
                 </div>
 

@@ -14,6 +14,7 @@ export interface Room {
   bedType: string;
   sizeSqm: number;
   image: string;
+  images: string[];
   facilities: string[];
   features: string[];
 }
@@ -24,14 +25,14 @@ export interface Facility {
   description: string;
   iconName: string;
   highlight?: string;
-  image?: string;
+  image: string;
 }
 
 export interface WhyStayReason {
   number: string;
   title: string;
   description: string;
-  image?: string;
+  image: string;
 }
 
 export interface Attraction {
@@ -40,6 +41,15 @@ export interface Attraction {
   distance: string;
   description: string;
   timeByTransport: string;
+  image: string;
+}
+
+export interface GalleryImage {
+  id: string;
+  title: string;
+  category: 'Rooms' | 'Lobby & Reception' | 'Dining & Enclave' | 'Location & Attractions';
+  url: string;
+  caption: string;
 }
 
 export interface BookingDetails {
