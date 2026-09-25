@@ -77,26 +77,26 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Hero Banner */}
-      <section className="relative py-20 bg-purple-950 overflow-hidden border-b border-purple-800/40">
-        <div className="absolute inset-0 opacity-25">
+      {/* Hero Banner with Background Photo */}
+      <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
+        <div className="absolute inset-0 z-0">
           <img
             src={HOTEL_INFO.lobbyImage}
-            alt="Q Loft Hotel Facilities"
+            alt="Hotel Reception Lobby"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter blur-xs"
+            className="w-full h-full object-cover filter brightness-50 scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-950 via-purple-950/80 to-purple-950" />
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/60 border border-purple-700/50 px-3.5 py-1 rounded-full">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/80 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
             Guest Comforts & Services
           </span>
-          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight drop-shadow-md">
             Facilities & Services
           </h1>
-          <p className="text-xs sm:text-base text-purple-200 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-base text-purple-100 max-w-2xl mx-auto leading-relaxed drop-shadow">
             From high-speed optical Wi-Fi and individual climate control to 24/7 guest assistance and prime Bedok food enclave access—discover everything Q Loft Hotels offers.
           </p>
         </div>
@@ -117,34 +117,32 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
           {HOTEL_FACILITIES.map((fac) => (
             <div
               key={fac.id}
-              className="bg-purple-950/80 border border-purple-800/60 hover:border-amber-400/50 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between"
+              className="bg-purple-950/90 border border-purple-800/60 hover:border-amber-400/50 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl group flex flex-col justify-between"
             >
-              <div>
-                {/* Facility Photo Header */}
-                {fac.image && (
-                  <div className="relative h-44 overflow-hidden">
-                    <img
-                      src={fac.image}
-                      alt={fac.title}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
-                    
-                    {fac.highlight && (
-                      <div className="absolute top-3 right-3 bg-purple-950/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
-                        {fac.highlight}
-                      </div>
-                    )}
-
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-purple-950/80 border border-purple-600/50 backdrop-blur-md flex items-center justify-center shadow-md">
-                      {iconMap[fac.iconName] || <Bed className="w-5 h-5 text-amber-400" />}
-                    </div>
+              {/* Facility Image Header */}
+              <div className="relative h-44 overflow-hidden bg-purple-900">
+                <img
+                  src={fac.image}
+                  alt={fac.title}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
+                
+                {fac.highlight && (
+                  <div className="absolute top-3 right-3 bg-purple-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                    {fac.highlight}
                   </div>
                 )}
 
-                {/* Card Details */}
-                <div className="p-5 space-y-2">
+                <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-purple-950/80 backdrop-blur-md border border-purple-600/50 flex items-center justify-center shadow-md">
+                  {iconMap[fac.iconName] || <Bed className="w-5 h-5 text-amber-400" />}
+                </div>
+              </div>
+
+              {/* Card Details */}
+              <div className="p-6 space-y-2 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
                   <h3 className="text-lg font-serif-luxury font-bold text-white group-hover:text-amber-300 transition-colors">
                     {fac.title}
                   </h3>
@@ -235,28 +233,40 @@ export const FacilitiesPage: React.FC<FacilitiesPageProps> = ({
 
       {/* Bottom CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-700/60 text-center space-y-6 shadow-2xl">
-          <h3 className="text-2xl sm:text-4xl font-serif-luxury font-bold text-white max-w-xl mx-auto">
-            Ready to Experience Our Services at Q Loft Hotels?
-          </h3>
-          <p className="text-xs sm:text-sm text-purple-200 max-w-lg mx-auto">
-            Book your room directly today for direct guest support, flexible check-in, and best available rates.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onOpenBooking}
-              className="px-8 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer flex items-center gap-2"
-            >
-              <Calendar className="w-4 h-4" />
-              <span>Book Your Room Now</span>
-            </button>
-            <button
-              onClick={() => onNavigate('contact')}
-              className="px-8 py-3 rounded-xl font-semibold text-xs text-white bg-purple-900/60 hover:bg-purple-800 border border-purple-600/50 cursor-pointer flex items-center gap-2"
-            >
-              <Phone className="w-4 h-4 text-amber-400" />
-              <span>Contact Desk</span>
-            </button>
+        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 shadow-2xl">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/src/assets/images/facility_modern_rooms_1790325916659.jpg"
+              alt="Modern rooms facility"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover filter brightness-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-purple-900/90 to-indigo-950/95" />
+          </div>
+
+          <div className="relative z-10 p-8 sm:p-12 text-center space-y-6">
+            <h3 className="text-2xl sm:text-4xl font-serif-luxury font-bold text-white max-w-xl mx-auto">
+              Ready to Experience Our Services at Q Loft Hotels?
+            </h3>
+            <p className="text-xs sm:text-sm text-purple-200 max-w-lg mx-auto leading-relaxed">
+              Book your room directly today for direct guest support, flexible check-in, and best available rates.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button
+                onClick={onOpenBooking}
+                className="px-8 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer flex items-center gap-2"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Book Your Room Now</span>
+              </button>
+              <button
+                onClick={() => onNavigate('contact')}
+                className="px-8 py-3 rounded-xl font-semibold text-xs text-white bg-purple-900/70 hover:bg-purple-800 border border-purple-600/50 backdrop-blur-md cursor-pointer flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-amber-400" />
+                <span>Contact Desk</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

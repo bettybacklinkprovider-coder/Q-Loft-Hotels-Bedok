@@ -46,26 +46,26 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Rooms Hero Banner */}
-      <section className="relative py-20 bg-purple-950 overflow-hidden border-b border-purple-800/40">
-        <div className="absolute inset-0 z-0 opacity-30">
+      {/* Rooms Hero Banner with Background Photo */}
+      <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
+        <div className="absolute inset-0 z-0">
           <img
-            src={ROOMS[0].image}
-            alt="Q Loft Rooms Hero"
+            src="/src/assets/images/room_deluxe_loft_1790321774811.jpg"
+            alt="Boutique Room Background"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover filter blur-xs"
+            className="w-full h-full object-cover filter brightness-50 scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-950 via-purple-950/80 to-purple-950" />
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/60 border border-purple-700/50 px-3.5 py-1 rounded-full">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/80 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
             Boutique Accommodations
           </span>
-          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight drop-shadow-md">
             Rooms & Loft Suites
           </h1>
-          <p className="text-xs sm:text-base text-purple-200 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-base text-purple-100 max-w-2xl mx-auto leading-relaxed drop-shadow">
             Choose from our modern mezzanine lofts, executive queen rooms, and spacious family suites in Bedok. All equipped with high-speed Wi-Fi, air conditioning, and plush bedding.
           </p>
         </div>
@@ -131,34 +131,32 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
           </div>
         ) : (
           <div className="space-y-10">
-            {filteredRooms.map((room, idx) => {
+            {filteredRooms.map((room) => {
               const priceConverted = Math.round(room.priceSGD * rateObj.rateFromSGD);
-              const isEven = idx % 2 === 0;
 
               return (
                 <div
                   key={room.id}
-                  className="bg-purple-950/90 border border-purple-800/60 rounded-3xl overflow-hidden shadow-2xl hover:border-amber-400/40 transition-all duration-300 grid grid-cols-1 lg:grid-cols-12"
+                  className="bg-purple-950/90 border border-purple-800/60 rounded-3xl overflow-hidden shadow-2xl hover:border-amber-400/40 transition-all duration-300 flex flex-col lg:flex-row justify-between"
                 >
-                  {/* Image Block */}
-                  <div className={`relative h-72 lg:h-auto lg:col-span-5 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+                  {/* Left Column: Room Photo */}
+                  <div className="relative lg:w-2/5 h-64 lg:h-auto min-h-[250px] overflow-hidden bg-purple-900 shrink-0">
                     <img
                       src={room.image}
                       alt={room.name}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-transparent to-transparent lg:hidden" />
-                    
-                    <div className="absolute top-4 left-4 bg-purple-900/90 backdrop-blur-md px-3 py-1 rounded-lg border border-purple-700/50 text-xs font-semibold text-amber-300">
+                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-purple-950 via-purple-950/20 to-transparent" />
+                    <span className="absolute top-4 left-4 bg-purple-950/80 backdrop-blur-md px-3 py-1 rounded-md text-xs font-semibold text-amber-300 border border-purple-700/50 shadow">
                       {room.category} Category
-                    </div>
+                    </span>
                   </div>
 
-                  {/* Room Info Block */}
-                  <div className={`p-8 lg:col-span-7 flex flex-col justify-between space-y-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                  {/* Right Column: Details & Actions */}
+                  <div className="lg:w-3/5 p-6 sm:p-8 space-y-6 flex flex-col justify-between">
                     <div className="space-y-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-purple-800/60 pb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-purple-800/60 pb-4">
                         <div>
                           <h2 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white">
                             {room.name}
@@ -240,7 +238,6 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
                         <span>Book {room.name}</span>
                       </button>
                     </div>
-
                   </div>
                 </div>
               );
@@ -251,34 +248,46 @@ export const RoomsPage: React.FC<RoomsPageProps> = ({
 
       {/* Room Booking Guarantee Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-700/60 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-semibold uppercase tracking-widest text-amber-300">
-              Need Special Room Arrangements?
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white">
-              Contact Reception for Group & Extended Stay Inquiries
-            </h3>
-            <p className="text-xs text-purple-200">
-              Planning an extended stay in Singapore or group travel? Our reservation team is happy to assist with custom room allocation and inquiries.
-            </p>
+        <div className="relative rounded-3xl overflow-hidden border border-purple-700/60 shadow-2xl">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/src/assets/images/facility_reception_lobby_1790321814207.jpg"
+              alt="Reception lobby"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover filter brightness-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-purple-900/90 to-indigo-950/95" />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <a
-              href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="px-6 py-3 rounded-xl font-semibold text-xs text-white bg-purple-800/80 hover:bg-purple-700 border border-purple-600/50 flex items-center justify-center gap-2"
-            >
-              <Phone className="w-4 h-4 text-amber-400" />
-              <span>Call +65 8774 6318</span>
-            </a>
+          <div className="relative z-10 p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <span className="text-xs font-semibold uppercase tracking-widest text-amber-300">
+                Need Special Room Arrangements?
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-white">
+                Contact Reception for Group & Extended Stay Inquiries
+              </h3>
+              <p className="text-xs text-purple-200">
+                Planning an extended stay in Singapore or group travel? Our reservation team is happy to assist with custom room allocation and inquiries.
+              </p>
+            </div>
 
-            <button
-              onClick={() => onOpenBooking()}
-              className="px-6 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer"
-            >
-              Book Room Now
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <a
+                href={`tel:${HOTEL_INFO.phoneRaw}`}
+                className="px-6 py-3 rounded-xl font-semibold text-xs text-white bg-purple-800/80 hover:bg-purple-700 border border-purple-600/50 flex items-center justify-center gap-2 backdrop-blur-md"
+              >
+                <Phone className="w-4 h-4 text-amber-400" />
+                <span>Call +65 8774 6318</span>
+              </a>
+
+              <button
+                onClick={() => onOpenBooking()}
+                className="px-6 py-3 rounded-xl font-semibold text-xs text-purple-950 bg-amber-300 hover:bg-amber-200 shadow cursor-pointer"
+              >
+                Book Room Now
+              </button>
+            </div>
           </div>
         </div>
       </section>

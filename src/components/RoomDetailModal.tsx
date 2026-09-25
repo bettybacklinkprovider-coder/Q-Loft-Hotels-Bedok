@@ -42,25 +42,27 @@ export const RoomDetailModal: React.FC<RoomDetailModalProps> = ({
 
         {/* Modal Body */}
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
-          {/* Main Photo Banner */}
-          <div className="relative h-64 sm:h-80 rounded-xl overflow-hidden border border-purple-800/60 group">
-            <img
-              src={room.image}
-              alt={room.name}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-purple-950 via-purple-950/30 to-transparent" />
-            
-            <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-              <div>
-                <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-medium bg-purple-900/80 border border-purple-700/50 text-purple-200">
+          {/* Main Room Banner Card with Room Photo */}
+          <div className="relative rounded-2xl overflow-hidden border border-purple-800/60 shadow-xl">
+            <div className="absolute inset-0 z-0">
+              <img
+                src={room.image}
+                alt={room.name}
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover filter brightness-50"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-950/95 via-purple-950/80 to-purple-950/90" />
+            </div>
+
+            <div className="relative z-10 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1 max-w-md">
+                <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-semibold bg-purple-900/90 border border-purple-700/50 text-amber-300 backdrop-blur-md shadow">
                   {room.bedType}
                 </span>
-                <p className="text-xs text-purple-200 mt-1">{room.tagline}</p>
+                <p className="text-sm sm:text-base font-semibold text-white drop-shadow">{room.tagline}</p>
               </div>
 
-              <div className="text-right bg-purple-950/90 backdrop-blur-md border border-amber-400/30 px-3.5 py-2 rounded-xl shadow-lg">
+              <div className="text-left sm:text-right bg-purple-950/90 backdrop-blur-md border border-amber-400/40 px-4 py-2.5 rounded-xl shadow-xl shrink-0">
                 <span className="text-[10px] text-purple-300 block">Starting From</span>
                 <span className="text-xl font-serif-luxury font-bold text-amber-300">
                   {rateObj.symbol}{convertedPrice} <span className="text-xs font-sans text-purple-200">/ night</span>

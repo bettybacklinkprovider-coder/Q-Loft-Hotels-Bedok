@@ -74,16 +74,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({
   return (
     <div className="pt-20 pb-20 space-y-16">
       
-      {/* Hero Header */}
-      <section className="relative py-20 bg-purple-950 overflow-hidden border-b border-purple-800/40">
+      {/* Hero Header with Background Photo */}
+      <section className="relative py-24 bg-purple-950 overflow-hidden border-b border-purple-800/40">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/src/assets/images/facility_bedok_location_1790325982040.jpg"
+            alt="Bedok Location Background"
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover filter brightness-50 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/90 via-purple-950/85 to-purple-950" />
+        </div>
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/60 border border-purple-700/50 px-3.5 py-1 rounded-full">
+          <span className="text-xs font-semibold uppercase tracking-widest text-amber-300 bg-purple-900/80 border border-purple-700/50 px-3.5 py-1 rounded-full backdrop-blur-md shadow-md">
             Guest Support & Location
           </span>
-          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-6xl font-serif-luxury font-bold text-white tracking-tight drop-shadow-md">
             Contact Us & Location
           </h1>
-          <p className="text-xs sm:text-base text-purple-200 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-base text-purple-100 max-w-2xl mx-auto leading-relaxed drop-shadow">
             Have questions about your stay, check-in, or room availability? Contact our reception team or visit us in Bedok, Singapore.
           </p>
         </div>
