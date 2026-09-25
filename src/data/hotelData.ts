@@ -94,7 +94,7 @@ export const HOTEL_FACILITIES: Facility[] = [
     description: "Thoughtfully designed boutique guest rooms equipped with premium orthopedic mattresses, crisp cotton linens, and mood lighting.",
     iconName: "Bed",
     highlight: "Orthopedic Quality",
-    image: "https://i.pinimg.com/736x/8d/db/e4/8ddbe4778a61c378c296bae192ef67cd.jpg"
+    image: "/src/assets/images/facility_modern_rooms_1790325916659.jpg"
   },
   {
     id: "fac-wifi",
@@ -159,7 +159,7 @@ export const WHY_STAY_REASONS: WhyStayReason[] = [
     number: "01",
     title: "Comfortable & Modern Accommodation",
     description: "Enjoy boutique aesthetic loft suites and executive rooms with plush bedding, rain showers, smart entertainment, and quiet air conditioning.",
-    image: "https://i.pinimg.com/736x/8d/db/e4/8ddbe4778a61c378c296bae192ef67cd.jpg"
+    image: "/src/assets/images/reason_loft_room_1790326175017.jpg"
   },
   {
     number: "02",
@@ -171,7 +171,7 @@ export const WHY_STAY_REASONS: WhyStayReason[] = [
     number: "03",
     title: "Quick Access to Changi Airport & Expo",
     description: "Just a 12–15 minute drive to Changi Airport Terminal 1–4 and Jewel Changi, plus 1 MRT stop to Singapore EXPO exhibition center.",
-    image: "https://i.pinimg.com/736x/06/a0/05/06a0059273f81d24916d655045295754.jpg"
+    image: "/src/assets/images/hero_qloft_bedok_exterior_1790321761783.jpg"
   },
   {
     number: "04",
