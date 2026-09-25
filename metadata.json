@@ -1,0 +1,6 @@
+{
+  "name": "Q Loft Hotels @ Bedok",
+  "description": "Official website for Q Loft Hotels @ Bedok, Singapore. Premium boutique hotel offering luxurious comfort, modern amenities, and prime Bedok location.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
